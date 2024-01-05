@@ -28,11 +28,13 @@ public class App extends Application {
       primaryStage.show();
     } catch (Exception e) {
       System.out.println("start() catch");
+      e.printStackTrace();
     } finally {
       try {
         DatabaseConnector.disconnect();
       } catch (SQLException e) {
         System.out.println("start() finally catch");
+        e.printStackTrace();
       }
     }
   }

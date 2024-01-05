@@ -66,6 +66,7 @@ public class AuthSceneController {
       }
     } catch (Exception e) {
       System.out.println("loginButtonClicked() catch");
+      e.printStackTrace();
     }
   }
 
@@ -110,6 +111,7 @@ public class AuthSceneController {
       }
     } catch (SQLException e) {
       System.out.println("registerButtonClicked() catch");
+      e.printStackTrace();
     }
   }
 }

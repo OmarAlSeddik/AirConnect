@@ -45,7 +45,8 @@ public class Methods {
       stage.setResizable(false);
       stage.show();
     } catch (Exception e) {
-      System.out.println("navigateToAuth(button) catch");
+      System.out.println("navigateToAuth() catch");
+      e.printStackTrace();
     }
   }
 
@@ -67,7 +68,8 @@ public class Methods {
       stage.setResizable(false);
       stage.show();
     } catch (Exception e) {
-      System.out.println("navigateToMainScene(button) catch");
+      System.out.println("navigateToMainScene() catch");
+      e.printStackTrace();
     }
   }
 
@@ -91,7 +93,6 @@ public class Methods {
     confirmationAlert.setHeaderText(null);
     confirmationAlert.setContentText(contentText);
 
-    // Get the result of the user's choice
     Stage stage = (Stage) confirmationAlert
       .getDialogPane()
       .getScene()
@@ -99,7 +100,6 @@ public class Methods {
     stage.setAlwaysOnTop(true);
     stage.toFront();
 
-    // Show the confirmation dialog and wait for the user's response
     ButtonType result = confirmationAlert
       .showAndWait()
       .orElse(ButtonType.CANCEL);

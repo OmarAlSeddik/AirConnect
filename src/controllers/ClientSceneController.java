@@ -1,5 +1,6 @@
 package controllers;
 
+import auth.AuthData;
 import database.DatabaseQuery;
 import database.Flight;
 import java.net.URL;
@@ -20,7 +21,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import shared.Methods;
 
@@ -96,7 +96,7 @@ public class ClientSceneController implements Initializable {
   private Button addFlightButton;
 
   @FXML
-  private Button clearFlightButton;
+  private Button reserveFlightButton;
 
   @FXML
   private Button deleteFlightButton;
@@ -117,11 +117,21 @@ public class ClientSceneController implements Initializable {
   private TextField destinationTf;
 
   private ObservableList<Flight> flightList;
+  private ObservableList<Flight> reservationList;
 
-  @FXML
-  void flightSearch() {
-    FilteredList<Flight> filter = new FilteredList<>(flightList, e -> true);
-    flightSearchField
+  void search(boolean isFlightMenu) {
+    FilteredList<Flight> filter = new FilteredList<>(
+      isFlightMenu ? flightList : reservationList,
+      e -> true
+    );
+
+    TableView<Flight> table = isFlightMenu ? flightTable : reservationTable;
+
+    TextField searchField = isFlightMenu
+      ? flightSearchField
+      : reservationSearchField;
+
+    searchField
       .textProperty()
       .addListener((observable, oldValue, newValue) -> {
         filter.setPredicate(predicateFlight -> {
@@ -163,16 +173,15 @@ public class ClientSceneController implements Initializable {
       });
 
     SortedList<Flight> sortedList = new SortedList<>(filter);
-    sortedList.comparatorProperty().bind(flightTable.comparatorProperty());
-    flightTable.setItems(sortedList);
+    sortedList.comparatorProperty().bind(table.comparatorProperty());
+    table.setItems(sortedList);
   }
-
-  @FXML
-  void reservationSearch(KeyEvent event) {}
 
   @FXML
   void flightsButtonClicked(ActionEvent event) {
     Methods.SwitchForm("flights", flightForm, reservationForm);
+    displayFlightListData();
+    search(true);
   }
 
   @FXML
@@ -183,6 +192,8 @@ public class ClientSceneController implements Initializable {
   @FXML
   void reservationsButtonClicked(ActionEvent event) {
     Methods.SwitchForm("reservations", flightForm, reservationForm);
+    displayReservationListData();
+    search(false);
   }
 
   @FXML
@@ -208,7 +219,7 @@ public class ClientSceneController implements Initializable {
       arrivalTf.getValue()
     );
 
-    showFlightListData();
+    displayFlightListData();
 
     Methods.displayAlert(
       "Successful Registeration",
@@ -292,14 +303,26 @@ public class ClientSceneController implements Initializable {
         false
       );
 
-      showFlightListData();
+      displayFlightListData();
     }
   }
 
-  ObservableList<Flight> flightListData() {
+  @FXML
+  void reserveFlightButtonClicked(ActionEvent event) {
+    Flight selectedFlight = flightTable.getSelectionModel().getSelectedItem();
+    DatabaseQuery.executeFlightReserveQuery(
+      AuthData.id,
+      selectedFlight.getId()
+    );
+  }
+
+  ObservableList<Flight> listData(boolean isFlightMenu) {
     ObservableList<Flight> listData = FXCollections.observableArrayList();
 
-    String sql = "select * from flight";
+    String sql = isFlightMenu
+      ? "select * from flight"
+      : "SELECT flight.* FROM flight JOIN reservation ON flight.id = reservation.flight_id WHERE reservation.user_id = " +
+      AuthData.id;
 
     try {
       ResultSet result = DatabaseQuery.executeSelectQuery(sql);
@@ -316,15 +339,15 @@ public class ClientSceneController implements Initializable {
         );
       }
     } catch (SQLException e) {
-      System.out.println("flightListData() catch");
+      System.out.println("listData() catch");
+      e.printStackTrace();
     }
 
     return listData;
   }
 
-  void showFlightListData() {
-    flightList = flightListData();
-
+  void displayFlightListData() {
+    flightList = listData(true);
     flightTableId.setCellValueFactory(new PropertyValueFactory<>("id"));
     flightTableOrigin.setCellValueFactory(new PropertyValueFactory<>("origin"));
     flightTableDestination.setCellValueFactory(
@@ -336,13 +359,30 @@ public class ClientSceneController implements Initializable {
     flightTableArrival.setCellValueFactory(
       new PropertyValueFactory<>("arrival")
     );
-    flightTableSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
-
     flightTable.setItems(flightList);
+  }
+
+  void displayReservationListData() {
+    reservationList = listData(false);
+    reservationTableId.setCellValueFactory(new PropertyValueFactory<>("id"));
+    reservationTableOrigin.setCellValueFactory(
+      new PropertyValueFactory<>("origin")
+    );
+    reservationTableDestination.setCellValueFactory(
+      new PropertyValueFactory<>("destination")
+    );
+    reservationTableDeparture.setCellValueFactory(
+      new PropertyValueFactory<>("departure")
+    );
+    reservationTableArrival.setCellValueFactory(
+      new PropertyValueFactory<>("arrival")
+    );
+    reservationTable.setItems(reservationList);
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    showFlightListData();
+    displayFlightListData();
+    search(true);
   }
 }

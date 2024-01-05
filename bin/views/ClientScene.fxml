@@ -41,7 +41,7 @@
                <children>
                   <VBox fx:id="flightForm" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TextField fx:id="flightSearchField" onAction="#flightSearch" promptText="Search the flights here..." style="-fx-background-radius: 0;">
+                        <TextField fx:id="flightSearchField" promptText="Search the flights here..." style="-fx-background-radius: 0;">
                            <font>
                               <Font name="Monospaced Regular" size="16.0" />
                            </font>
@@ -120,7 +120,7 @@
                                           <Font name="Monospaced Regular" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="clearFlightButton" layoutX="10.0" layoutY="56.0" mnemonicParsing="false" onAction="#clearFlightButtonClicked" style="-fx-pref-width: 128;" text="Reserve Flight">
+                                    <Button fx:id="reserveFlightButton" layoutX="10.0" layoutY="56.0" mnemonicParsing="false" onAction="#reserveFlightButtonClicked" style="-fx-pref-width: 128;" text="Reserve Flight">
                                        <font>
                                           <Font name="Monospaced Regular" size="12.0" />
                                        </font>
@@ -133,7 +133,7 @@
                   </VBox>
                   <VBox fx:id="reservationForm" style="visibility: hidden;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TextField fx:id="reservationSearchField" onAction="#reservationSearch" promptText="Search the reservations here..." style="-fx-background-radius: 0;">
+                        <TextField fx:id="reservationSearchField" promptText="Search the reservations here..." style="-fx-background-radius: 0;">
                            <font>
                               <Font name="Monospaced Regular" size="16.0" />
                            </font>
@@ -146,6 +146,7 @@
                               <TableColumn fx:id="reservationTableDeparture" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Departure" />
                               <TableColumn fx:id="reservationTableArrival" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Arrival" />
                               <TableColumn fx:id="reservationTableSeats" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Available Seats" />
+                              <TableColumn fx:id="reservationTableReserved" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Reserved" />
                            </columns>
                         </TableView>
                      </children>

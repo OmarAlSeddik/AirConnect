@@ -21,6 +21,7 @@ public class DatabaseQuery {
       resultSet = statement.executeQuery(sql);
     } catch (SQLException e) {
       System.out.println("executeSelectQuery(sql) catch");
+      e.printStackTrace();
     }
 
     return resultSet;
@@ -38,6 +39,7 @@ public class DatabaseQuery {
       resultSet = statement.executeQuery();
     } catch (SQLException e) {
       System.out.println("executeSelectQuery(sql, s1) catch");
+      e.printStackTrace();
     }
 
     return resultSet;
@@ -56,6 +58,7 @@ public class DatabaseQuery {
       resultSet = statement.executeQuery();
     } catch (SQLException e) {
       System.out.println("executeSelectQuery(sql, s1, s2) catch");
+      e.printStackTrace();
     }
 
     return resultSet;
@@ -76,7 +79,8 @@ public class DatabaseQuery {
       statement.setString(2, password);
       statement.executeUpdate();
     } catch (SQLException e) {
-      System.out.println("executeRegisterQuery(username, password) catch");
+      System.out.println("executeRegisterQuery() catch");
+      e.printStackTrace();
     }
   }
 
@@ -105,6 +109,7 @@ public class DatabaseQuery {
       statement.executeUpdate();
     } catch (SQLException e) {
       System.out.println("executeFlightRegisterQuery() catch");
+      e.printStackTrace();
     }
   }
 
@@ -119,6 +124,7 @@ public class DatabaseQuery {
       statement.executeUpdate(sql);
     } catch (SQLException e) {
       System.out.println("executeFlightDeleteQuery() catch");
+      e.printStackTrace();
     }
   }
 
@@ -148,9 +154,28 @@ public class DatabaseQuery {
 
       statement.executeUpdate();
     } catch (SQLException e) {
-      System.out.println(
-        "executeFlightUpdateQuery(origin, destination, departureDate, arrivalDate) catch"
-      );
+      System.out.println("executeFlightUpdateQuery() catch");
+      e.printStackTrace();
+    }
+  }
+
+  public static void executeFlightReserveQuery(
+    Integer userId,
+    Integer flightId
+  ) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+
+    String sql = "INSERT INTO reservation (user_id, flight_id) VALUES (?, ?)";
+    try {
+      connection = DatabaseConnector.connect();
+      statement = connection.prepareStatement(sql);
+      statement.setInt(1, userId);
+      statement.setInt(2, flightId);
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("executeRegisterQuery() catch");
+      e.printStackTrace();
     }
   }
 
@@ -175,6 +200,7 @@ public class DatabaseQuery {
       if (resultSet.next()) return true;
     } catch (SQLException e) {
       System.out.println("executeCheckReservedQuery() catch");
+      e.printStackTrace();
     }
 
     return false;
