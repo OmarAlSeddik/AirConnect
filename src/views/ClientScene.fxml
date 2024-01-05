@@ -30,11 +30,34 @@
                            </font></Button>
                      </children>
                   </VBox>
-                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutButtonClicked" style="-fx-pref-width: 128; -fx-background-radius: 4;" text="Logout">
-                     <font>
-                        <Font name="Monospaced Regular" size="12.0" />
-                     </font>
-                  </Button>
+                  <VBox style="-fx-spacing: 16;">
+                     <children>
+                        <Label fx:id="userTypeLabel" text="ADMIN">
+                           <font>
+                              <Font name="Monospaced Regular" size="18.0" />
+                           </font>
+                        </Label>
+                        <VBox>
+                           <children>
+                              <Label text="Welcome,">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="usernameLabel" text="Username">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutButtonClicked" style="-fx-pref-width: 128; -fx-background-radius: 4;" text="Logout">
+                           <font>
+                              <Font name="Monospaced Regular" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
             </VBox>
             <AnchorPane>
@@ -57,7 +80,16 @@
                               <TableColumn fx:id="flightTableReserved" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Reserved" />
                           </columns>
                         </TableView>
-                        <HBox style="-fx-padding: 16;">
+                        <HBox fx:id="clientOptions" alignment="CENTER_RIGHT" style="-fx-padding: 16;">
+                           <children>
+                              <Button fx:id="reserveFlightButtonClient" mnemonicParsing="false" onAction="#reserveFlightButtonClicked" text="Reserve / Undo">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="editingForm" style="-fx-padding: 16;">
                            <children>
                               <VBox alignment="CENTER" style="-fx-spacing: 16;" HBox.hgrow="ALWAYS">
                                  <children>
@@ -120,7 +152,7 @@
                                           <Font name="Monospaced Regular" size="12.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="reserveFlightButton" layoutX="10.0" layoutY="56.0" mnemonicParsing="false" onAction="#reserveFlightButtonClicked" style="-fx-pref-width: 128;" text="Reserve Flight">
+                                    <Button fx:id="reserveFlightButton" layoutX="10.0" layoutY="56.0" mnemonicParsing="false" onAction="#reserveFlightButtonClicked" style="-fx-pref-width: 128;" text="Reserve / Undo">
                                        <font>
                                           <Font name="Monospaced Regular" size="12.0" />
                                        </font>

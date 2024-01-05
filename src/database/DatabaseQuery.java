@@ -114,16 +114,28 @@ public class DatabaseQuery {
   }
 
   public static void executeFlightDeleteQuery(int flightId) {
-    String sql = "DELETE FROM flight WHERE id = " + flightId;
+    String sql1 = "DELETE FROM reservation WHERE flight_id = ?";
+    String sql2 = "DELETE FROM flight WHERE id = ?";
     Connection connection = null;
-    Statement statement = null;
+    PreparedStatement statement = null;
 
     try {
       connection = DatabaseConnector.connect();
-      statement = connection.createStatement();
-      statement.executeUpdate(sql);
+      statement = connection.prepareStatement(sql1);
+      statement.setInt(1, flightId);
+      statement.executeUpdate();
     } catch (SQLException e) {
-      System.out.println("executeFlightDeleteQuery() catch");
+      System.out.println("executeFlightDeleteQuery() sql1 catch");
+      e.printStackTrace();
+    }
+
+    try {
+      connection = DatabaseConnector.connect();
+      statement = connection.prepareStatement(sql2);
+      statement.setInt(1, flightId);
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("executeFlightDeleteQuery() sql2 catch");
       e.printStackTrace();
     }
   }
@@ -179,6 +191,26 @@ public class DatabaseQuery {
     }
   }
 
+  public static void executeFlightUnreserveQuery(
+    Integer userId,
+    Integer flightId
+  ) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+
+    String sql = "DELETE FROM reservation WHERE user_id = ? and flight_id = ?";
+    try {
+      connection = DatabaseConnector.connect();
+      statement = connection.prepareStatement(sql);
+      statement.setInt(1, userId);
+      statement.setInt(2, flightId);
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("executeRegisterQuery() catch");
+      e.printStackTrace();
+    }
+  }
+
   public static boolean executeCheckReservedQuery(
     Integer userId,
     Integer flightId
@@ -204,5 +236,28 @@ public class DatabaseQuery {
     }
 
     return false;
+  }
+
+  public static Integer executeGetSeatCountQuery(Integer flightId) {
+    String sql = "SELECT COUNT(user_id) from reservation where flight_id = ?";
+
+    Connection connection = null;
+    PreparedStatement statement = null;
+    ResultSet resultSet = null;
+
+    try {
+      connection = DatabaseConnector.connect();
+      statement = connection.prepareStatement(sql);
+      statement.setInt(1, flightId);
+      resultSet = statement.executeQuery();
+      if (resultSet.next()) {
+        return resultSet.getInt(1);
+      }
+    } catch (SQLException e) {
+      System.out.println("executeSelectQuery(sql) catch");
+      e.printStackTrace();
+    }
+
+    return 0;
   }
 }

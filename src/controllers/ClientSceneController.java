@@ -8,6 +8,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -15,12 +17,16 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import shared.Methods;
 
@@ -78,6 +84,9 @@ public class ClientSceneController implements Initializable {
   private TableColumn<Flight, String> reservationTableOrigin;
 
   @FXML
+  private TableColumn<Flight, String> reservationTableReserved;
+
+  @FXML
   private Button flightsButton;
 
   @FXML
@@ -115,6 +124,18 @@ public class ClientSceneController implements Initializable {
 
   @FXML
   private TextField destinationTf;
+
+  @FXML
+  private Label userTypeLabel;
+
+  @FXML
+  private Label usernameLabel;
+
+  @FXML
+  private HBox editingForm;
+
+  @FXML
+  private HBox clientOptions;
 
   private ObservableList<Flight> flightList;
   private ObservableList<Flight> reservationList;
@@ -310,10 +331,34 @@ public class ClientSceneController implements Initializable {
   @FXML
   void reserveFlightButtonClicked(ActionEvent event) {
     Flight selectedFlight = flightTable.getSelectionModel().getSelectedItem();
-    DatabaseQuery.executeFlightReserveQuery(
+
+    if (selectedFlight == null) {
+      Methods.displayAlert(
+        "No Flight Selected",
+        "Please select a flight to reserve / unreserve.",
+        true
+      );
+      return;
+    }
+
+    boolean isReserved = DatabaseQuery.executeCheckReservedQuery(
       AuthData.id,
       selectedFlight.getId()
     );
+
+    if (isReserved) {
+      DatabaseQuery.executeFlightUnreserveQuery(
+        AuthData.id,
+        selectedFlight.getId()
+      );
+    } else {
+      DatabaseQuery.executeFlightReserveQuery(
+        AuthData.id,
+        selectedFlight.getId()
+      );
+    }
+
+    displayFlightListData();
   }
 
   ObservableList<Flight> listData(boolean isFlightMenu) {
@@ -348,6 +393,7 @@ public class ClientSceneController implements Initializable {
 
   void displayFlightListData() {
     flightList = listData(true);
+
     flightTableId.setCellValueFactory(new PropertyValueFactory<>("id"));
     flightTableOrigin.setCellValueFactory(new PropertyValueFactory<>("origin"));
     flightTableDestination.setCellValueFactory(
@@ -359,6 +405,22 @@ public class ClientSceneController implements Initializable {
     flightTableArrival.setCellValueFactory(
       new PropertyValueFactory<>("arrival")
     );
+
+    flightTableSeats.setCellValueFactory(cellData -> {
+      Flight flight = cellData.getValue();
+      int seats = 60 - DatabaseQuery.executeGetSeatCountQuery(flight.getId());
+      return new SimpleIntegerProperty(seats).asObject();
+    });
+
+    flightTableReserved.setCellValueFactory(cellData -> {
+      Flight flight = cellData.getValue();
+      boolean isReserved = DatabaseQuery.executeCheckReservedQuery(
+        AuthData.id,
+        flight.getId()
+      );
+      return new SimpleStringProperty(isReserved ? "Yes" : "No");
+    });
+
     flightTable.setItems(flightList);
   }
 
@@ -377,11 +439,40 @@ public class ClientSceneController implements Initializable {
     reservationTableArrival.setCellValueFactory(
       new PropertyValueFactory<>("arrival")
     );
+
+    reservationTableSeats.setCellValueFactory(cellData -> {
+      Flight flight = cellData.getValue();
+      int seats = 60 - DatabaseQuery.executeGetSeatCountQuery(flight.getId());
+      return new SimpleIntegerProperty(seats).asObject();
+    });
+
+    reservationTableReserved.setCellValueFactory(cellData -> {
+      Flight flight = cellData.getValue();
+      boolean isReserved = DatabaseQuery.executeCheckReservedQuery(
+        AuthData.id,
+        flight.getId()
+      );
+      return new SimpleStringProperty(isReserved ? "Yes" : "No");
+    });
+
     reservationTable.setItems(reservationList);
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    userTypeLabel.setText(AuthData.isAdmin ? "ADMIN" : "CLIENT");
+    usernameLabel.setText(AuthData.username + "!");
+    if (!AuthData.isAdmin) {
+      Parent parent = editingForm.getParent();
+      if (parent instanceof Pane) {
+        ((Pane) parent).getChildren().remove(editingForm);
+      }
+    } else {
+      Parent parent = clientOptions.getParent();
+      if (parent instanceof Pane) {
+        ((Pane) parent).getChildren().remove(clientOptions);
+      }
+    }
     displayFlightListData();
     search(true);
   }
