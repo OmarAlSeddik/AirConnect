@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #AAA;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ClientSceneController">
+   <children>
+      <HBox layoutX="-209.0" layoutY="-109.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox style="-fx-padding: 16; -fx-background-color: #888;">
+               <children>
+                  <VBox style="-fx-spacing: 16;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="flightsButton" mnemonicParsing="false" onAction="#flightsButtonClicked" style="-fx-pref-width: 128; -fx-background-radius: 4;" text="Flights">
+                           <font>
+                              <Font name="Monospaced Regular" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="reservationsButton" mnemonicParsing="false" onAction="#reservationsButtonClicked" style="-fx-pref-width: 128; -fx-background-radius: 4;" text="Reservations">
+                           <font>
+                              <Font name="Monospaced Regular" size="12.0" />
+                           </font></Button>
+                     </children>
+                  </VBox>
+                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutButtonClicked" style="-fx-pref-width: 128; -fx-background-radius: 4;" text="Logout">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+            <AnchorPane>
+               <children>
+                  <VBox fx:id="flightForm" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TextField fx:id="flightSearchField" onAction="#flightSearch" promptText="Search the flights here..." style="-fx-background-radius: 0;">
+                           <font>
+                              <Font name="Monospaced Regular" size="16.0" />
+                           </font>
+                        </TextField>
+                        <TableView fx:id="flightTable" prefWidth="896.0" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="flightTableId" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="ID" />
+                            <TableColumn fx:id="flightTableOrigin" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Origin" />
+                              <TableColumn fx:id="flightTableDestination" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Destination" />
+                              <TableColumn fx:id="flightTableDeparture" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Departure" />
+                              <TableColumn fx:id="flightTableArrival" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Arrival" />
+                              <TableColumn fx:id="flightTableSeats" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Available Seats" />
+                              <TableColumn fx:id="flightTableReserved" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Reserved" />
+                          </columns>
+                        </TableView>
+                        <HBox style="-fx-padding: 16;">
+                           <children>
+                              <VBox alignment="CENTER" style="-fx-spacing: 16;" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" style="-fx-spacing: 16;">
+                                       <children>
+                                          <Label style="-fx-pref-width: 96;" text="Origin">
+                                             <font>
+                                                <Font name="Monospaced Regular" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="originTf" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" style="-fx-spacing: 16;">
+                                       <children>
+                                          <Label style="-fx-pref-width: 96;" text="Destination">
+                                             <font>
+                                                <Font name="Monospaced Regular" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="destinationTf" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="52.0" style="-fx-spacing: 16;">
+                                       <children>
+                                          <Label style="-fx-pref-width: 96;" text="Departure">
+                                             <font>
+                                                <Font name="Monospaced Regular" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <DatePicker fx:id="departureTf" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="93.0" style="-fx-spacing: 16;">
+                                       <children>
+                                          <Label style="-fx-pref-width: 96;" text="Arrival">
+                                             <font>
+                                                <Font name="Monospaced Regular" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <DatePicker fx:id="arrivalTf" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="778.0" layoutY="10.0" style="-fx-padding: 16; -fx-spacing: 16;" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Button fx:id="addFlightButton" mnemonicParsing="false" onAction="#addFlightButtonClicked" style="-fx-pref-width: 128;" text="Add Flight">
+                                       <font>
+                                          <Font name="Monospaced Regular" size="12.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="updateFlightButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#updateFlightButtonClicked" style="-fx-pref-width: 128;" text="Update Flight">
+                                       <font>
+                                          <Font name="Monospaced Regular" size="12.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="deleteFlightButton" layoutX="10.0" layoutY="33.0" mnemonicParsing="false" onAction="#deleteFlightButtonClicked" style="-fx-pref-width: 128;" text="Delete Flight">
+                                       <font>
+                                          <Font name="Monospaced Regular" size="12.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="clearFlightButton" layoutX="10.0" layoutY="56.0" mnemonicParsing="false" onAction="#clearFlightButtonClicked" style="-fx-pref-width: 128;" text="Reserve Flight">
+                                       <font>
+                                          <Font name="Monospaced Regular" size="12.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="reservationForm" style="visibility: hidden;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TextField fx:id="reservationSearchField" onAction="#reservationSearch" promptText="Search the reservations here..." style="-fx-background-radius: 0;">
+                           <font>
+                              <Font name="Monospaced Regular" size="16.0" />
+                           </font>
+                        </TextField>
+                        <TableView fx:id="reservationTable" prefWidth="768.0" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="reservationTableId" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="ID" />
+                              <TableColumn fx:id="reservationTableOrigin" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Origin" />
+                              <TableColumn fx:id="reservationTableDestination" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Destination" />
+                              <TableColumn fx:id="reservationTableDeparture" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Departure" />
+                              <TableColumn fx:id="reservationTableArrival" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Arrival" />
+                              <TableColumn fx:id="reservationTableSeats" editable="false" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" resizable="false" style="-fx-pref-width: 128;" text="Available Seats" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
